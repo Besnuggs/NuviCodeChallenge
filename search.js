@@ -37,13 +37,21 @@ module.exports = function search (grid, wordlist) {
 function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wordsFound, coordinates=[]){
     const letter = grid[row][column].toLowerCase();
     if(!(letter in trieNode)) return;
-    if(coordinates.length >= 3){
-        if(!isStraightLine(coordinates)) return coordinates=[];
-    };
-    coordinates.push([row, column]);
     trieNode = trieNode[letter];
+    // coordinates.push([row, column]);
+    // if(coordinates.length >= 3){
+    //     if(isStraightLine(coordinates)) {
+    //         // console.log(trieNode, grid, letter, coordinates)
+    //         if('*' in trieNode){
+    //             console.log(trieNode, grid, 'finished');
+    //             wordsFound[trieNode['*']] = true;
+    //             coordinates=[];
+    //         };
+    //     } else {
+    //         coordinates.pop()
+    //     }
+    // };
     if('*' in trieNode){
-        console.log(trieNode);
         wordsFound[trieNode['*']] = true;
         coordinates=[];
     };
@@ -56,7 +64,7 @@ function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wo
 function isStraightLine(coordinates){
     let isAStraightLine = true;
 
-    const south = coordinates[0][0] < coordinates[1][0] && coordinates[0][1] === coordinates[1][1],
+    let south = coordinates[0][0] < coordinates[1][0] && coordinates[0][1] === coordinates[1][1],
         north = coordinates[0][0] > coordinates[1][0] && coordinates[0][1] === coordinates[1][1],
         northEast = coordinates[0][0] > coordinates[1][0] && coordinates[0][1] < coordinates[1][1],
         northWest = coordinates[0][0] > coordinates[1][0] && coordinates[0][1] > coordinates[1][1],
@@ -67,28 +75,27 @@ function isStraightLine(coordinates){
     
     for(let i = 2; i < coordinates.length; i++){
         if(south){
-            
-
+            south = coordinates[i-1][0] < coordinates[i][0] && coordinates[i-1][1] === coordinates[i][1]
         } else if(southEast){
-
+            southEast = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] < coordinates[i][1]
         } else if(southWest){
-
+            southWest = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] > coordinates[i][1]
         } else if(north){
-
+            north = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] > coordinates[i][1]
         } else if(northEast){
-
+            northEast = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] > coordinates[i][1]
         } else if(northWest){
-
+            northWest = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] > coordinates[i][1]
         } else if(east){
-
+            east = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] > coordinates[i][1]
         } else if(west){
-
+            west = coordinates[i-1][1] > coordinates[i][0] && coordinates[i-1][1] > coordinates[i][1]
         } 
     }
+    console.log(coordinates)
+    console.log(south || north || northEast || northWest || east || west || southEast || southWest);
 
-    console.log({south, north, northEast, northWest, east, west, southEast, southWest})
-
-    return isSingleLine;
+    return south || north || northEast || northWest || east || west || southEast || southWest;
 }
 
 function getAdjacentCharacters(row, column, grid){
