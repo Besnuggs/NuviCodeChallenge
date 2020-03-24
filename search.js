@@ -37,14 +37,13 @@ module.exports = function search (grid, wordlist) {
 function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wordsFound, coordinates=[]){
     const letter = grid[row][column].toLowerCase();
     if(!(letter in trieNode)) return;
-    //Need to see if direction is consistent - Need at least three coordinates to test
     if(coordinates.length >= 3){
         if(!isStraightLine(coordinates)) return coordinates=[];
-    }
-    coordinates.push([row, column])
+    };
+    coordinates.push([row, column]);
     trieNode = trieNode[letter];
     if('*' in trieNode){
-        console.log(trieNode)
+        console.log(trieNode);
         wordsFound[trieNode['*']] = true;
         coordinates=[];
     };
@@ -55,7 +54,7 @@ function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wo
 }
 
 function isStraightLine(coordinates){
-    let isSingleLine = true;
+    let isAStraightLine = true;
 
     const south = coordinates[0][0] < coordinates[1][0] && coordinates[0][1] === coordinates[1][1],
         north = coordinates[0][0] > coordinates[1][0] && coordinates[0][1] === coordinates[1][1],
@@ -66,9 +65,10 @@ function isStraightLine(coordinates){
         southEast = coordinates[0][1] > coordinates[1][0] && coordinates[0][1] < coordinates[1][1],
         southWest = coordinates[0][1] > coordinates[1][0] && coordinates[0][1] > coordinates[1][1];
     
-    for(const coordinate of coordinates){
+    for(let i = 2; i < coordinates.length; i++){
         if(south){
-            coordinate[]
+            
+
         } else if(southEast){
 
         } else if(southWest){
@@ -87,7 +87,6 @@ function isStraightLine(coordinates){
     }
 
     console.log({south, north, northEast, northWest, east, west, southEast, southWest})
-
 
     return isSingleLine;
 }
