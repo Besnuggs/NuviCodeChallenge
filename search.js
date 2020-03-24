@@ -40,8 +40,6 @@ function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wo
     if(!(letter in trieNode)) return;
     trieNode = trieNode[letter];
     if('*' in trieNode){
-        console.log(coordinates, wordsFound, trieNode)
-        console.table(grid)
         wordsFound[trieNode['*']] = true;
     } 
     const adjacentCharacters = getAdjacentCharacters(row, column, grid);
