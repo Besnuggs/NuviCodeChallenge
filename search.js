@@ -9,13 +9,13 @@
  ***/
 module.exports = function search (grid, wordlist) {
     /*
-    * Additional Notes from Email Exchange with Jake, instructions, and looking at sample Grids/WordLists:
+    * Additional Important Notes from Email Exchange with Jake, instructions, and looking at sample Grids/WordLists:
         1) Words are formed in a single, contiguous direction of characters (more like a crossword than a boggle game). Keep track of direction.
         2) Resulting array of words does not need to account for duplicates. If it exists in the grid and wordlist in a single, contiguous direction, return it.
         3) Given the example grids, it seems safe to assume that characters can be reused to form other words from previously found words. For example, 'SUN' and 'MOON' share the same 'N' in grid2. 'LOVE' and 'LION' share the same 'L' in grid1.
-        4) Case insensitive. Ensure values that are being checked are either both lowercase/uppercase.
+        4) Case insensitive. Ensure values that are being checked are either both lowercase/uppercase. The wordlist seems to always be lowercase based on examples provided in sample.
     */
-    const wordlistNoDuplicates = [...new Set(wordlist)].map((word) => word.toUpperCase()),
+    const wordlistNoDuplicates = [...new Set(wordlist)].map((word) => word.toLowerCase()),
         wordsFound = {},
         trie = new Trie();
 
@@ -35,7 +35,7 @@ module.exports = function search (grid, wordlist) {
 }
 
 function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wordsFound){
-    const letter = grid[row][column]
+    const letter = grid[row][column].toLowerCase()
     if(!(letter in trieNode)) return;
     trieNode = trieNode[letter];
     if('*' in trieNode){
@@ -50,39 +50,39 @@ function checkCharAtCoordinateAgainstCharInWords(row, column, grid, trieNode, wo
 function getAdjacentCharacters(row, column, grid){
     const adjacentCharacters = [];
     /*
-    *Adjacent Char Directions from Given Letter*
+    *Conditions: Adjacent Char Directions from Given Letter Coordinates*
     */
-    const leftAdjacentChar = column > 0,
-        rightAdjacentChar = column < grid[0].length - 1,
-        topAdjacentChar = row > 0,
-        bottomAdjacentChar = row < grid.length - 1
-        topLeftAdjacentChar = row > 0 && column > 0,
-        topRightAdjacentChar = row > 0 && column < grid[0].length - 1,
-        bottomRightAdjacentChar = row < grid.length - 1 && column < grid[0].length - 1,
-        bottomLeftAdjacentChar = row < grid.length - 1 && column > 0;
+    const leftChar = column > 0,
+        rightChar = column < grid[0].length - 1,
+        topChar = row > 0,
+        bottomChar = row < grid.length - 1
+        topLeftChar = row > 0 && column > 0,
+        topRightChar = row > 0 && column < grid[0].length - 1,
+        bottomRightChar = row < grid.length - 1 && column < grid[0].length - 1,
+        bottomLeftChar = row < grid.length - 1 && column > 0;
     
-    if(topLeftAdjacentChar){
+    if(topLeftChar){
         adjacentCharacters.push([row - 1, column - 1]);
     };
-    if(topRightAdjacentChar){
+    if(topRightChar){
         adjacentCharacters.push([row - 1, column + 1]);
     };
-    if(bottomRightAdjacentChar){
+    if(bottomRightChar){
         adjacentCharacters.push([row + 1, column + 1]);
     };
-    if(bottomLeftAdjacentChar){
+    if(bottomLeftChar){
         adjacentCharacters.push([row + 1, column - 1]);
     };
-    if(topAdjacentChar){
+    if(topChar){
         adjacentCharacters.push([row - 1, column]);
     };
-    if(bottomAdjacentChar){
+    if(bottomChar){
         adjacentCharacters.push([row + 1, column]);
     };
-    if(leftAdjacentChar){
+    if(leftChar){
         adjacentCharacters.push([row, column - 1]);
     };
-    if(rightAdjacentChar){
+    if(rightChar){
         adjacentCharacters.push([row, column + 1]);
     };
     
